@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-github_token = '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'
+github_token = ''
 
 
 @app.route("/<string:name>/repos")
