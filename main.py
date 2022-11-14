@@ -1,13 +1,14 @@
-from flask import Flask
+from flask import Flask, request
 import requests
+import config
 
 
 app = Flask(__name__)
 
-github_token = ''
+github_token = config.github_token
 
 
-@app.route("/<string:name>/repos")
+@app.route("/<string:name>/repos", methods=['GET'])
 def get_list_of_repo(name):
     res = requests.get(f'https://api.github.com/users/{name}/repos')
     list_of_repos = []
@@ -18,13 +19,12 @@ def get_list_of_repo(name):
     return data
 
 
-@app.route("/<string:name>/<string:repo>/issues")
+@app.route("/<string:name>/<string:repo>/issues", methods=['POST'])
 def set_issue(name, repo):
     headers = {'Accept': 'application/vnd.github+json',
                'Authorization': f'Bearer {github_token}'}
 
-    data = {"title": "issue title",
-            "body": "test issue text"}
+    data = request.json
 
     res = requests.post(f'https://api.github.com/repos/{name}/{repo}/issues',
                         headers=headers,
